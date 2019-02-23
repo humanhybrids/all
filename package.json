@@ -1,0 +1,23 @@
+{
+  "name": "all",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "dependencies": {
+    "@bazel/bazel": "^0.22.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/humanhybrids/all.git"
+  },
+  "author": "Cory Cook",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/humanhybrids/all/issues"
+  },
+  "homepage": "https://github.com/humanhybrids/all#readme"
+}
