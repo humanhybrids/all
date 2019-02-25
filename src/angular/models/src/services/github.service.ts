@@ -9,6 +9,8 @@ export interface GithubUser {
     avatar_url: string;
 }
 
+/**
+ * Primary service for interfacing with Github API. */
 @Injectable({ providedIn: 'root' })
 export class GithubService {
 
