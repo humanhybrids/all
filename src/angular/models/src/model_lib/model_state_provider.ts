@@ -1,6 +1,4 @@
 import { InjectionToken, FactoryProvider } from '@angular/core';
-import { ModelState } from './model_state';
-import { GlobalState } from './global_state';
 import { StateFactory } from './state_factory';
 
 export class ModelToken<T> extends InjectionToken<T> {

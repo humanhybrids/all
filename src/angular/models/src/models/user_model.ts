@@ -1,8 +1,7 @@
 
 import { GithubService, GithubUser } from '../services/github.service';
-import { Injectable, InjectionToken, Inject } from '@angular/core';
+import { Injectable, Inject } from '@angular/core';
 import { ModelState } from '../model_lib/model_state';
-import { StateFactory } from '../model_lib/state_factory';
 import { first } from 'rxjs/operators';
 import { ModelToken } from '../model_lib/model_state_provider';
 
