@@ -6,6 +6,7 @@ import { UserModel } from '../models/user_model';
     template: `
     <!--The content below is only a placeholder and can be replaced.-->
     <div style="text-align:center">
+      <p>Github Username: <input [value]="username | async" (change)="onChange($event)"></p>
       <p>{{username | async}}</p>
       <img [src]="(user | async).avatar_url">
       <p>Name: {{(user | async).name}}</p>
@@ -14,11 +15,14 @@ import { UserModel } from '../models/user_model';
     styles: [],
 })
 export class AppComponent {
-    title = 'models';
     user = this.userModel.getUser();
     username = this.userModel.getUsername();
 
     constructor(private readonly userModel: UserModel) {
         userModel.loadUser('corycook');
+    }
+
+    onChange(evt) {
+        this.userModel.loadUser(evt.target.value);
     }
 }

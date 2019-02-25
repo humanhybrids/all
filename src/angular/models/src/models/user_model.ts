@@ -30,12 +30,15 @@ export class UserModel {
         private readonly service: GithubService) { }
 
     loadUser(username: string) {
-        const state = this.state.getState();
-        this.state.push({ ...state, loading: true }, 'load-user'); // 'load-user' is a descriptive tag used for debugging
+        this.state.push(state => ({ ...state, loading: true }), 'load-user'); // 'load-user' is a descriptive tag used for debugging
         this.service.getUser(username).pipe(first()).subscribe((user?: GithubUser) => {
-            this.state.push({ user, loading: false }, 'load-user-success');
+            this.state.push(() => ({ user, loading: false }), 'load-user-success');
         }, error => {
-            this.state.push({ ...state, loading: false, errorMessage: error.message }, 'load-user-error');
+            this.state.push(state => ({
+                ...state,
+                loading: false,
+                errorMessage: error.message
+            }), 'load-user-error');
         });
     }
 

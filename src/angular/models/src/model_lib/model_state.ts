@@ -9,15 +9,11 @@ import { distinctUntilChanged, map } from 'rxjs/operators';
 export class ModelState<T> {
     constructor(private readonly state: GlobalState, private readonly key: string) { }
 
-    push(state: T, action?: string) {
-        this.state.push(this.key, state, action);
+    push(stateFn: (state: T) => T, action?: string) {
+        this.state.push(this.key, stateFn(this.state.getState(this.key)), action);
     }
 
     select<TResult>(selector: (state: T) => TResult): Observable<TResult> {
         return this.state.select(this.key).pipe(map(selector), distinctUntilChanged());
-    }
-
-    getState(): T {
-        return this.state.getState(this.key);
     }
 }
