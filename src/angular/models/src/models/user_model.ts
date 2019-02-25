@@ -1,9 +1,10 @@
 
 import { GithubService, GithubUser } from '../services/github.service';
-import { Injectable } from '@angular/core';
+import { Injectable, InjectionToken, Inject } from '@angular/core';
 import { ModelState } from '../model_lib/model_state';
 import { StateFactory } from '../model_lib/state_factory';
 import { first } from 'rxjs/operators';
+import { ModelToken } from '../model_lib/model_state_provider';
 
 interface UserModelState {
     user: GithubUser;
@@ -16,19 +17,18 @@ const initialState: UserModelState = {
     loading: false,
 };
 
+export const USER_MODEL_STATE =
+    new ModelToken<UserModelState>('user_model', initialState);
+
 /**
  * The primary data model for fetching and querying data for a single
  * Github user.
  */
 @Injectable({ providedIn: 'root' })
 export class UserModel {
-    private readonly state: ModelState<UserModelState>;
-
-    constructor(stateFactory: StateFactory, private readonly service: GithubService) {
-        // It would be better if the ModelState could be injected directly and
-        // we didn't have to create it here.
-        this.state = stateFactory.createModelState(this, initialState);
-    }
+    constructor(
+        @Inject(USER_MODEL_STATE) private readonly state: ModelState<UserModelState>,
+        private readonly service: GithubService) { }
 
     loadUser(username: string) {
         const state = this.state.getState();

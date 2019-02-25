@@ -4,7 +4,7 @@ import { ModelState } from './model_state';
 
 /** Determines if key is a string. */
 function isString(key: any): key is string {
-    return key instanceof String;
+    return typeof key === 'string';
 }
 
 /**
