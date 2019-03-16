@@ -1,28 +1,37 @@
-import { Component } from '@angular/core';
-import { UserModel } from '../models/user_model';
+import { Component } from "@angular/core";
+import { GithubService } from "../services/github.service";
+import { map } from "rxjs/operators";
 
 @Component({
-    selector: 'app-root',
-    template: `
+  selector: "app-root",
+  template: `
     <!--The content below is only a placeholder and can be replaced.-->
     <div style="text-align:center">
-      <p>Github Username: <input [value]="username | async" (change)="onChange($event)"></p>
-      <p>{{username | async}}</p>
-      <img [src]="(user | async).avatar_url">
-      <p>Name: {{(user | async).name}}</p>
+      <p>
+        Github Username:
+        <input (change)="loadUser($event.target.value)" />
+      </p>
+      <div *ngIf="(user | async) as user">
+        <p>{{ user.login }}</p>
+        <img [src]="user.avatar_url" />
+        <p>Name: {{ user.name }}</p>
+      </div>
+      <p style="color: red" *ngIf="(errorMessage | async) as error">
+        {{ error }}
+      </p>
     </div>
   `,
-    styles: [],
+  styles: []
 })
 export class AppComponent {
-    user = this.userModel.getUser();
-    username = this.userModel.getUsername();
+  user = this.github.user;
+  errorMessage = this.github.errorMessage;
 
-    constructor(private readonly userModel: UserModel) {
-        userModel.loadUser('corycook');
-    }
+  constructor(private readonly github: GithubService) {
+    github.loadUser("google");
+  }
 
-    onChange(evt) {
-        this.userModel.loadUser(evt.target.value);
-    }
+  loadUser(username: string) {
+    this.github.loadUser(username);
+  }
 }

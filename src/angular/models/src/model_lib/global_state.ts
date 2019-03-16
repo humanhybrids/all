@@ -25,6 +25,11 @@ class DevTools {
   }
 }
 
+interface DataScope<T> {
+  push(reducer: (previousState: T) => T): void;
+  select<OutT>(selector: (currentState: T) => OutT): Observable<OutT>;
+}
+
 /**
  * The global state container for the application.
  */
@@ -47,5 +52,17 @@ export class GlobalState {
 
   getState<TResult>(key: string): TResult {
     return this.state.getValue()[key] as TResult;
+  }
+
+  createScope<T>(key: string, initialState: T): DataScope<T> {
+    this.push(key, initialState, "init");
+    return {
+      push: reducer => this.push(key, reducer(this.getState(key)), "push"),
+      select: selector =>
+        this.select(key).pipe(
+          map(selector),
+          distinctUntilChanged()
+        )
+    };
   }
 }

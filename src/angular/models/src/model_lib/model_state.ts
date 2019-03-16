@@ -1,6 +1,6 @@
-import { GlobalState } from "./global_state";
 import { Observable } from "rxjs";
 import { distinctUntilChanged, map } from "rxjs/operators";
+import { GlobalState } from "./global_state";
 
 /**
  * The local model state for a single data model. Is indexed
@@ -12,8 +12,20 @@ export class ModelState<T> {
     private readonly key: string
   ) {}
 
-  push(stateFn: (state: T) => T, action?: string) {
-    this.state.push(this.key, stateFn(this.state.getState(this.key)), action);
+  push(reducer: (prevState: T) => T, action?: string) {
+    const nextState = reducer(this.state.getState(this.key));
+    this.state.push(this.key, nextState, action);
+  }
+
+  pushNext<T0>(
+    observable: Observable<T0>,
+    reducer: (prevState: T, observableResult: T0) => T,
+    action?: string
+  ) {
+    observable.subscribe(result => {
+      const nextState = reducer(this.state.getState(this.key), result);
+      this.state.push(this.key, nextState, action);
+    });
   }
 
   select<TResult>(selector: (state: T) => TResult): Observable<TResult> {
